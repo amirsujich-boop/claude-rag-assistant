@@ -25,6 +25,18 @@ app.use((req, res, next) => {
   next();
 });
 
+// very small in-memory rate limit per IP: 30 questions / 10 minutes
+const hits = new Map();
+app.use("/api/chat", (req, res, next) => {
+  const key = req.ip;
+  const now = Date.now();
+  const arr = (hits.get(key) || []).filter((t) => now - t < 10 * 60 * 1000);
+  if (arr.length >= 30) return res.status(429).json({ error: "Too many requests, try again in a few minutes." });
+  arr.push(now);
+  hits.set(key, arr);
+  next();
+});
+
 app.post("/api/chat", async (req, res) => {
   const { question, history } = req.body || {};
   if (typeof question !== "string" || !question.trim() || question.length > 2000) {
