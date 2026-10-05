@@ -1,12 +1,13 @@
 {
   "name": "claude-rag-assistant",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Small, self-hosted support assistant: your documents in, grounded answers out. Local embeddings, Claude for the answer, one script to ingest, one file to embed on any site.",
   "main": "src/server.js",
   "type": "module",
   "scripts": {
     "ingest": "node src/ingest.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js"
   },
   "keywords": [
     "rag",
